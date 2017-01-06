@@ -1,0 +1,41 @@
+{
+    "name": "evaneos/daemon",
+    "description": "A lib to manage PHP daemons",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rémi San @ Evaneos",
+            "email": "remi@evaneos.com"
+        }
+    ],
+
+    "require" : {
+        "php": ">=5.5.9",
+
+        "psr/log": "^1.0",
+        "symfony/console": "^3.2"
+    },
+
+    "require-dev" : {
+        "phpunit/phpunit" : "^4.0",
+        "mockery/mockery": "^0.9.4"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Evaneos\\Daemon\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "Evaneos\\Daemon\\Test\\": "tests/unit/"
+        }
+    },
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    }
+}
