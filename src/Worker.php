@@ -24,7 +24,7 @@ class Worker implements LoggerAwareInterface
      * @var Daemon
      */
     private $daemon;
-    
+
     /**
      * Constructor
      *
@@ -66,7 +66,7 @@ class Worker implements LoggerAwareInterface
         switch ($signal) {
             case SIGINT:
             case SIGTERM:
-                $this->logger->alert('Worker killed or terminated', ['sessionId', $this->sessionId]);
+                $this->logger->info('Worker terminated', ['sessionId', $this->sessionId]);
                 $this->daemon->stop();
                 $this->exitWorker(1);
                 break;
