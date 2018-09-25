@@ -48,7 +48,6 @@ class Worker implements LoggerAwareInterface
         $this->sessionId = ($sessionId !== null) ? $sessionId : uniqid();
 
         if (function_exists('pcntl_signal')) {
-            declare (ticks = 1);
             pcntl_signal(SIGTERM, [$this, 'signalHandler']);
             pcntl_signal(SIGINT, [$this, 'signalHandler']);
             pcntl_signal(SIGHUP, [$this, 'signalHandler']);
