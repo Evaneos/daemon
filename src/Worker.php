@@ -67,23 +67,10 @@ class Worker implements LoggerAwareInterface
             case SIGTERM:
                 $this->logger->info('Worker terminated', ['sessionId', $this->sessionId]);
                 $this->daemon->stop();
-                $this->exitWorker(0);
                 break;
             case SIGHUP:
                 $this->logger->info('Starting daemon', ['session' => $this->sessionId]);
                 break;
         }
-    }
-
-    /**
-     * Stop the worker
-     *
-     * @param int $returnValue
-     *
-     * @codeCoverageIgnore
-     */
-    protected function exitWorker($returnValue)
-    {
-        exit($returnValue);
     }
 }

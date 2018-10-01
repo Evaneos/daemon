@@ -3,7 +3,7 @@
 namespace Evaneos\Daemon\Test;
 
 use Evaneos\Daemon\Daemon;
-use Evaneos\Daemon\Test\Mock\TestWorker;
+use Evaneos\Daemon\Worker;
 use Mockery\Mock;
 
 class WorkerTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +11,7 @@ class WorkerTest extends \PHPUnit_Framework_TestCase
     /** @var Daemon | Mock */
     private $daemon;
 
-    /** @var TestWorker */
+    /** @var Worker */
     private $serviceUnderTest;
 
     protected function tearDown()
@@ -21,51 +21,38 @@ class WorkerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->daemon = \Mockery::mock(Daemon::class);
+        $this->daemon = \Mockery::spy(Daemon::class);
 
-        $this->serviceUnderTest = new TestWorker($this->daemon);
+        $this->serviceUnderTest = new Worker($this->daemon);
     }
 
     /**
      * @test
      */
-    public function itShouldStartTheDemon()
+    public function it_starts_daemon_when_it_runs()
     {
-        $this->daemon->shouldReceive('start')->once();
-
         $this->serviceUnderTest->run();
+
+        $this->daemon->shouldHaveReceived('start')->once();
     }
 
     /**
      * @test
      */
-    public function itShouldStopTheWorkerWhenReceivingSIGINT()
+    public function it_tells_to_daemon_to_stop_when_it_is_receiving_SIGINT()
     {
-        $this->daemon->shouldReceive('stop')->once();
-
         $this->serviceUnderTest->signalHandler(SIGINT);
-        $this->assertTrue($this->serviceUnderTest->exited);
+
+        $this->daemon->shouldHaveReceived('stop')->once();
     }
 
     /**
      * @test
      */
-    public function itShouldStopTheWorkerWhenReceivingSIGTERM()
+    public function it_tells_to_daemon_to_stop_when_it_is_receiving_SIGTERM()
     {
-        $this->daemon->shouldReceive('stop')->once();
-
         $this->serviceUnderTest->signalHandler(SIGTERM);
-        $this->assertTrue($this->serviceUnderTest->exited);
-    }
 
-    /**
-     * @test
-     */
-    public function itShouldDoNothingToTheWorkerWhenReceivingSIGHUP()
-    {
-        $this->daemon->shouldNotReceive('start');
-        $this->daemon->shouldNotReceive('stop');
-
-        $this->serviceUnderTest->signalHandler(SIGHUP);
+        $this->daemon->shouldHaveReceived('stop')->once();
     }
 }
